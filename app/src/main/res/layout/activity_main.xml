@@ -11,14 +11,14 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="User Name"
+        android:text="User Name"
         android:layout_marginTop="50dp"/>
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:text="Password"
         android:layout_marginTop="50dp"
         android:layout_below="@+id/username"/>
 
@@ -26,7 +26,7 @@
         android:id="@+id/repassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Retype Password"
+        android:text="Password"
         android:layout_marginTop="50dp"
         android:layout_below="@+id/password"/>
 

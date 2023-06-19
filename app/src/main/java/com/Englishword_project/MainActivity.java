@@ -58,12 +58,29 @@ public class MainActivity extends AppCompatActivity {
 
                             if(insert==true){
                                 Toast.makeText(MainActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                                frommainac[0]= user;
-                                frommainac[1]= pass;
-                                frommainac[2]= String.valueOf("1");
-                                Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
-                                intent.putExtra("data", frommainac);
+
+                                // MainActivity.java
+
+
+
+// Intent oluşturma ve verileri ekleyerek HomeActivity'e geçiş yapma
+                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                intent.putExtra("data", 1);
+                                intent.putExtra("username", user);
                                 startActivity(intent);
+
+
+                                DBHelper dbHelper = new DBHelper(MainActivity.this);
+                                boolean success = dbHelper.addUser(user, pass);
+
+                                if (success) {
+                                    Toast.makeText(MainActivity.this, "Kullanıcı kaydedildi:"+success, Toast.LENGTH_SHORT).show();
+                                    // Ana sayfaya yönlendirme veya istediğiniz işlemleri yapma
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Kullanıcı kaydedilemedi:"+success, Toast.LENGTH_SHORT).show();
+                                }
+
+
                             }else{
                                 Toast.makeText(MainActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                             }

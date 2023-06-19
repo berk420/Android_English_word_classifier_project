@@ -2,17 +2,23 @@ plugins {
     id 'com.android.application'
 }
 
+
 android {
     namespace 'com.Englishword_project'
     compileSdk 33
+    useLibrary 'org.apache.http.legacy'
+
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+    aaptOptions {
+        ignoreAssetsPattern "!.svn:!.git:!.ds_store:!*.scc:.*:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
 
 
     defaultConfig {
-        applicationId "com.Englishword_project"
+        applicationId 'com.Englishword_project'
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -31,7 +37,31 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        mlModelBinding true
+    }
+    ndkVersion '25.2.9519653'
+    buildToolsVersion '33.0.0'
+    dependenciesInfo {
+        includeInApk true
+        includeInBundle true
+    }
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+            maven {
+                url "https://mvnrepository.com"
+            }
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:4.2.0'
+        }
+    }
+
+
 }
+
 
 dependencies {
 
@@ -40,6 +70,16 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'org.apache.pdfbox:pdfbox:2.0.23'
     implementation 'com.itextpdf:itextpdf:5.5.13.2'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:17.0.0'
+
+
+
+
+
 
 
     testImplementation 'junit:junit:4.13.2'

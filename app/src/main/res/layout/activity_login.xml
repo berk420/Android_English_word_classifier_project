@@ -11,14 +11,14 @@
         android:id="@+id/username1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="User Name"
+        android:text="User Name"
         android:layout_marginTop="50dp"/>
 
     <EditText
         android:id="@+id/password1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:text="Password"
         android:layout_marginTop="50dp"
         android:layout_below="@+id/username1"/>
 
