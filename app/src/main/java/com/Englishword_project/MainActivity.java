@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         signin = (Button) findViewById(R.id.btnsignin);
 
 
-
         DB = new DBHelper(this);
 
 
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                  user = username.getText().toString();
                  pass = password.getText().toString();
                 String repass = repassword.getText().toString();
+
 
 
                 if(user.equals("")||pass.equals("")||repass.equals(""))
@@ -91,7 +91,11 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         Toast.makeText(MainActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
                     }
-                } }
+                }
+                Intent intent  = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("data","true");
+                startActivity(intent);
+            }
         });
 
 

@@ -7,10 +7,6 @@
     tools:context=".HomeActivity">
 
 
-
-
-
-
     <Button
         android:id="@+id/pdf"
         android:layout_width="match_parent"
@@ -19,10 +15,10 @@
         android:text="PDF yükle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042"
+        app:layout_constraintVertical_bias="0.049"
         tools:ignore="MissingConstraints,UnknownId" />
 
     <TextView
@@ -61,6 +57,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.205" />
 
+
     <Button
         android:id="@+id/comic"
         android:layout_width="match_parent"
@@ -72,15 +69,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112"
-        tools:ignore="MissingConstraints,UnknownId"
-        />
-
+        app:layout_constraintVertical_bias="0.121"
+        tools:ignore="MissingConstraints,UnknownId" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_zor"
-        android:layout_width="141dp"
-        android:layout_height="694dp"
+        android:layout_width="140dp"
+        android:layout_height="558dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -91,8 +86,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_orta"
-        android:layout_width="137dp"
-        android:layout_height="692dp"
+        android:layout_width="131dp"
+        android:layout_height="560dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -104,7 +99,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_kolay"
         android:layout_width="137dp"
-        android:layout_height="695dp"
+        android:layout_height="656dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -112,6 +107,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resim içerikli pdf'ler için ödeme yapınız"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/pay_now"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="Öde"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_orta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.903"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

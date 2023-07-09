@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +24,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
@@ -32,19 +38,27 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.paymentsheet.PaymentSheet;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button pdf,comic;
+    Button pdf,comic,pay;
     TextView kolayk,ortak,zork;
     EditText anketsoru1,anketsoru3;
     private static final int PICK_PDF_FILE = 1;
-    public String anket_onay,username,extractedText,anketsoru1_data,anketsoru2_data,anketsoru3_data,anketsoru4_data,take;
+    public String receivedData,anket_onay,username,extractedText,anketsoru1_data,anketsoru2_data,anketsoru3_data,anketsoru4_data,take;
     public int butonsecim=0;
     public HashSet<String> hashSet_kolay = new HashSet<>();
     public HashSet<String> hashSet_orta = new HashSet<>();
@@ -54,6 +68,14 @@ public class HomeActivity extends AppCompatActivity {
     public StringBuilder extractedText_resim = new StringBuilder();
 
     private RecyclerView recyclerView_kolay,recyclerView_orta,recyclerView_zor;
+    private static final String[] mediumWords = {"medium"};
+    private static final String[] hardWords = {"hard"};
+
+
+    private static final String[] easyWords = {"easy"};
+    PaymentSheet paymentsheet;
+    String paymentIntentClientSecret;
+    PaymentSheet.CustomerConfiguration configuration;
 
 
 
@@ -67,14 +89,35 @@ public class HomeActivity extends AppCompatActivity {
         kolayk=findViewById(R.id.kolayk);
         ortak=findViewById(R.id.Ortak);
         zork=findViewById(R.id.Zork);
+        pay=findViewById(R.id.pay_now);
 
 
         recyclerView_zor = findViewById(R.id.recyclerView_zor);
         recyclerView_zor.setLayoutManager(new LinearLayoutManager(this));
+
         recyclerView_orta = findViewById(R.id.recyclerView_orta);
         recyclerView_orta.setLayoutManager(new LinearLayoutManager(this));
+
         recyclerView_kolay = findViewById(R.id.recyclerView_kolay);
         recyclerView_kolay.setLayoutManager(new LinearLayoutManager(this));
+
+
+        comic.setEnabled(false);
+        fetchApi();
+        paymentsheet=new PaymentSheet(this,this::onPaymentSheetResult);
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (paymentIntentClientSecret != null){
+                paymentsheet.presentWithPaymentIntent(paymentIntentClientSecret,new PaymentSheet.Configuration("Code Easy",configuration));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Api yukleniyor", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
 
         pdf.setOnClickListener(v -> {
@@ -92,15 +135,20 @@ public class HomeActivity extends AppCompatActivity {
             startActivityForResult(intent, PICK_PDF_FILE);
         });
         //register olunduğunda 1 verisi login olundupunda 0 verisi geir
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            gelenveri = bundle.getStringArray("data");
+
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            receivedData = intent.getStringExtra("data");
+            // Alınan veriyi kullanın veya görüntüleyin
+
         }
-            try {
-                if (gelenveri[0] == "0"){
-                    //hiç göstermedik
-                }
-                else{
+
+
+            if ("true".equals(receivedData)) {
+                try {
+
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Veri Kullanım sözleşmesi");
                     builder.setMessage("Kullanıcı Onayı\n" +
@@ -157,7 +205,7 @@ public class HomeActivity extends AppCompatActivity {
 
                                 AlertDialog.Builder anketsoruBuilder3 = new AlertDialog.Builder(HomeActivity.this);
                                 anketsoruBuilder3.setTitle("Anket Soruları");
-                                anketsoruBuilder3.setMessage("Ne kadar maaş alıyorsunuz?");
+                                anketsoruBuilder3.setMessage("Aylık gelirin nedir?");
                                 final EditText input3 = new EditText(HomeActivity.this);
                                 anketsoruBuilder3.setView(input3);
                                 anketsoruBuilder3.setPositiveButton("diğer soruya geç", (dialog3, which3) -> {
@@ -173,8 +221,8 @@ public class HomeActivity extends AppCompatActivity {
                                     anketsoruBuilder4.setView(anketsoru4Spinner);
                                     anketsoruBuilder4.setPositiveButton("Anketi bitir", (dialog4, position4) -> {
                                         anketsoru4_data = bolge[anketsoru4Spinner.getSelectedItemPosition()];
-                                        anket_onay="true";
-                                        AgeDBHelper(anket_onay,anketsoru1_data,anketsoru2_data,anketsoru3_data,anketsoru4_data);
+                                        anket_onay = "true";
+                                        AgeDBHelper(anket_onay, anketsoru1_data, anketsoru2_data, anketsoru3_data, anketsoru4_data);
 
                                     });
 
@@ -191,27 +239,86 @@ public class HomeActivity extends AppCompatActivity {
                     });
 
                     builder.setNegativeButton("Onay vermiyorum", (dialog, which) -> {
-                        anketsoru1_data=null;
-                        anketsoru2_data=null;
-                        anketsoru3_data=null;
-                        anketsoru4_data=null;
-                        anket_onay="false";
-                        AgeDBHelper(anket_onay,anketsoru1_data,anketsoru2_data,anketsoru3_data,anketsoru4_data);
+                        anketsoru1_data = null;
+                        anketsoru2_data = null;
+                        anketsoru3_data = null;
+                        anketsoru4_data = null;
+                        anket_onay = "false";
+                        AgeDBHelper(anket_onay, anketsoru1_data, anketsoru2_data, anketsoru3_data, anketsoru4_data);
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
+                catch (Exception e) {
+                    //Toast.makeText(HomeActivity.this, "Hatamız buymus:"+e, Toast.LENGTH_SHORT).show();
+                }
+            } else {
 
             }
-            catch (Exception e){
-                Toast.makeText(HomeActivity.this, "Hatamız buymus:"+e, Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    public void fetchApi(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://demo.codeseasy.com/apis/stripe/";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject =new JSONObject(response);
+                            configuration=new PaymentSheet.CustomerConfiguration(
+                                    jsonObject.getString("customer"),
+                                    jsonObject.getString("ephemeralKey")
+
+                            );
+                            paymentIntentClientSecret = jsonObject.getString("paymentIntent");
+                            PaymentConfiguration.init(getApplicationContext(), jsonObject.getString("publishableKey"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
+        }){
+            protected Map<String, String> getParams(){
+                Map<String, String> paramV = new HashMap<>();
+                paramV.put("authKey", "abc");
+                return paramV;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    private void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult){
+
+        if (paymentSheetResult instanceof PaymentSheetResult.Canceled){
+            Toast.makeText(this, "ödeme alınamadaı", Toast.LENGTH_SHORT).show();
+
+        }
+        if (paymentSheetResult instanceof PaymentSheetResult.Failed){
+            Toast.makeText(this, "sıkıntı oldu", Toast.LENGTH_SHORT).show();
+
+        }
+        if (paymentSheetResult instanceof PaymentSheetResult.Completed){
+            fetchApi(); // birden fazla ödeme yapabilrisin bu olursa
+            Toast.makeText(this, "ödeme alındı", Toast.LENGTH_SHORT).show();
+            comic.setEnabled(true);
+
+        }
 
     }
 
 
 
- 
+
     @SuppressLint("MissingSuperCall")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -260,6 +367,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
                 word_spreader(extractedText);
+
+
                 List<String> wordList_kolay = new ArrayList<>(hashSet_kolay);
                 ArrayAdapter<String> adapter_kolay = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordList_kolay);
                 recyclerView_kolay.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -431,12 +540,10 @@ public class HomeActivity extends AppCompatActivity {
 
                 UserPDFDataDBHelper(extractedText,hashSet_kolay.toString(),hashSet_orta.toString(),hashSet_zor.toString());
             } catch (Exception e) {
-                Toast.makeText(HomeActivity.this, "Hatamız buymus:"+e, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeActivity.this, "Hatamız buymus:"+e, Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-
 
 
     public void word_spreader(String extractedText){

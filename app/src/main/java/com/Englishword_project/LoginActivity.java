@@ -21,6 +21,9 @@ public class LoginActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.username1);
         password = (EditText) findViewById(R.id.password1);
         btnlogin = (Button) findViewById(R.id.btnsignin1);
+
+
+
         DB = new DBHelper(this);
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
@@ -36,14 +39,19 @@ public class LoginActivity extends AppCompatActivity {
                     Boolean checkuserpass = DB.checkusernamepassword(user, pass);
                     if(checkuserpass==true){
                         Toast.makeText(LoginActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
-                        Intent intent  = new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.putExtra("anketvis","0");
-                        startActivity(intent);
+
                     }else{
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
+
                 }
+
+                Intent intent  = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("data","gg");
+                startActivity(intent);
+
             }
+
         });
     }
 }

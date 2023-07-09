@@ -1,0 +1,67 @@
+
+word_spreader(extractedText);
+                List<String> wordList_kolay = new ArrayList<>(hashSet_kolay);
+                ArrayAdapter<String> adapter_kolay = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordList_kolay);
+                recyclerView_kolay.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+                    @NonNull
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                        return new RecyclerView.ViewHolder(view) {};
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                        ((TextView) holder.itemView.findViewById(android.R.id.text1)).setText(wordList_kolay.get(position));
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return wordList_kolay.size();
+                    }
+                });
+
+                List<String> wordList_orta = new ArrayList<>(hashSet_orta);
+                ArrayAdapter<String> adapter_orta = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordList_orta);
+                recyclerView_orta.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+                    @NonNull
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                        return new RecyclerView.ViewHolder(view) {};
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                        ((TextView) holder.itemView.findViewById(android.R.id.text1)).setText(wordList_orta.get(position));
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return wordList_orta.size();
+                    }
+                });
+
+                List<String> wordList_zor = new ArrayList<>(hashSet_zor);
+                ArrayAdapter<String> adapter_zor = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wordList_zor);
+                recyclerView_zor.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+                    @NonNull
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                        return new RecyclerView.ViewHolder(view) {};
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                        ((TextView) holder.itemView.findViewById(android.R.id.text1)).setText(wordList_zor.get(position));
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return wordList_zor.size();
+                    }
+                });
