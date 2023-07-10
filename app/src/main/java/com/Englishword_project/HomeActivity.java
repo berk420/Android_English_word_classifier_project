@@ -110,12 +110,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (paymentIntentClientSecret != null){
-                paymentsheet.presentWithPaymentIntent(paymentIntentClientSecret,new PaymentSheet.Configuration("Code Easy",configuration));
+                paymentsheet.presentWithPaymentIntent(paymentIntentClientSecret,new PaymentSheet.Configuration("Ödeme ekranı"
+                        ,configuration));
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Api yukleniyor", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
