@@ -261,7 +261,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void fetchApi(){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://demo.codeseasy.com/apis/stripe/";
+        String url ="C:/xampp/htdocs/stripe-android-api";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -279,8 +279,6 @@ public class HomeActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override

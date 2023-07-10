@@ -74,8 +74,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_zor"
-        android:layout_width="140dp"
-        android:layout_height="558dp"
+        android:layout_width="136dp"
+        android:layout_height="696dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -86,8 +86,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_orta"
-        android:layout_width="131dp"
-        android:layout_height="560dp"
+        android:layout_width="127dp"
+        android:layout_height="695dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -99,7 +99,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_kolay"
         android:layout_width="137dp"
-        android:layout_height="656dp"
+        android:layout_height="697dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
