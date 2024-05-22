@@ -1,0 +1,9 @@
+{
+  "require": {
+    "stripe/stripe-php": "^10.16"
+  },
+
+  "config": {
+
+  }
+}
